@@ -1,0 +1,21 @@
+spring:
+  # datasource 数据源配置内容
+  datasource:
+    url: jdbc:mysql://localhost:3306/wxshop?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123
+
+mybatis:
+  mapper-locations: classpath*:db/mapper/*.xml
+  type-aliases-package: com.kongmu373.wxshop.entity
+  config-location: classpath:db/config.xml
+
+# logging
+logging:
+  level:
+    # dao 开启 debug 模式 mybatis 输入 sql
+    com:
+      kongmu373:
+        park:
+          mapper: debug
