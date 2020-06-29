@@ -1,6 +1,6 @@
 package com.kongmu373.wxshop.service;
 
-import com.kongmu373.wxshop.entity.User;
+import com.kongmu373.wxshop.generated.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

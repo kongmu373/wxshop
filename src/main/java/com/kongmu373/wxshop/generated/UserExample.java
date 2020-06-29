@@ -1,4 +1,4 @@
-package com.kongmu373.wxshop.entity;
+package com.kongmu373.wxshop.generated;
 
 import java.util.ArrayList;
 import java.util.Date;

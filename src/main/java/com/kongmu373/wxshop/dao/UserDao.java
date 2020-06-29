@@ -1,8 +1,8 @@
 package com.kongmu373.wxshop.dao;
 
-import com.kongmu373.wxshop.entity.User;
-import com.kongmu373.wxshop.entity.UserExample;
-import com.kongmu373.wxshop.mapper.UserMapper;
+import com.kongmu373.wxshop.generated.User;
+import com.kongmu373.wxshop.generated.UserExample;
+import com.kongmu373.wxshop.generated.UserMapper;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class UserDao {
     }
 
     public void insertUser(User user) {
-        try (final SqlSession session = sqlSessionFactory.openSession(true)) {
+        try (SqlSession session = sqlSessionFactory.openSession(true)) {
             UserMapper mapper = session.getMapper(UserMapper.class);
             mapper.insert(user);
         }
@@ -26,7 +26,7 @@ public class UserDao {
     }
 
     public User getUserByTel(String tel) {
-        try (final SqlSession session = sqlSessionFactory.openSession(true)) {
+        try (SqlSession session = sqlSessionFactory.openSession(true)) {
             UserMapper mapper = session.getMapper(UserMapper.class);
             UserExample userExample = new UserExample();
             userExample.createCriteria().andTelEqualTo(tel);

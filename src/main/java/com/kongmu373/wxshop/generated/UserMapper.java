@@ -1,7 +1,5 @@
-package com.kongmu373.wxshop.mapper;
+package com.kongmu373.wxshop.generated;
 
-import com.kongmu373.wxshop.entity.User;
-import com.kongmu373.wxshop.entity.UserExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 

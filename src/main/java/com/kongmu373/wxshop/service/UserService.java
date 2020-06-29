@@ -1,7 +1,7 @@
 package com.kongmu373.wxshop.service;
 
 import com.kongmu373.wxshop.dao.UserDao;
-import com.kongmu373.wxshop.entity.User;
+import com.kongmu373.wxshop.generated.User;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class UserService {
     /**
      * 创建一个用户如果输入的用户不存在
      *
-     * @param tel
+     * @param tel 电话号码
      * @return 返回一个用户的实体
      */
     public User createUserIfNotExist(String tel) {
@@ -32,10 +32,14 @@ public class UserService {
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
         try {
-        userDao.insertUser(user);
+            userDao.insertUser(user);
         } catch (PersistenceException e) {
             return userDao.getUserByTel(tel);
         }
         return user;
+    }
+
+    public User getUserByTel(String tel) {
+        return userDao.getUserByTel(tel);
     }
 }
