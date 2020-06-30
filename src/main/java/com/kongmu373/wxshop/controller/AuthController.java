@@ -36,6 +36,7 @@ public class AuthController {
     public void code(@RequestBody TelAndCode telAndCode, HttpServletResponse response) {
         if (!verifyParamsService.verifyTelParam(telAndCode)) {
             response.setStatus(HttpStatus.BAD_REQUEST.value());
+            return;
         }
         authService.sendVerificationCode(telAndCode.getTel());
     }

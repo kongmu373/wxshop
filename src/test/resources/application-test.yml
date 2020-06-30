@@ -1,10 +1,12 @@
 spring:
   # datasource 数据源配置内容
   datasource:
-    url: jdbc:mysql://localhost:3306/wxshop?useSSL=false&useUnicode=true&characterEncoding=UTF-8
-    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    url: jdbc:mysql://localhost:3307/test?useSSL=false&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.jdbc.Driver
     username: root
-    password: 123
+    password: my-secret-pw
+
 
 mybatis:
   mapper-locations: classpath*:db/mapper/*.xml
