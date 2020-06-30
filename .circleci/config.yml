@@ -1,19 +1,26 @@
+machine:
+  services:
+    - docker
 version: 2
 jobs:
   test:
     docker:
       - image: circleci/openjdk:8u212-jdk-stretch
     steps:
+      # Install via apk on alpine based images
+      - run:
+          name: Install Docker client
+          command: apk add docker-cli
       - checkout
       - restore_cache:
-          key: hcsp-{{ checksum "pom.xml" }}
+          key: km-{{ checksum "pom.xml" }}
       - run:
           name: Run Maven verify
           command: mvn clean verify
       - save_cache: # saves the project dependencies
           paths:
             - ~/.m2
-          key: hcsp-{{ checksum "pom.xml" }}
+          key: km-{{ checksum "pom.xml" }}
 workflows:
   version: 2
   default:
