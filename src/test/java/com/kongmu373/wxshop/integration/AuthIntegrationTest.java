@@ -1,4 +1,4 @@
-package com.kongmu373.wxshop.service;
+package com.kongmu373.wxshop.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Objects;
@@ -24,7 +24,7 @@ import static java.net.HttpURLConnection.HTTP_OK;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = WxshopApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(locations = "classpath:application.yml")
+@ActiveProfiles("test")
 public class AuthIntegrationTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
@@ -40,7 +40,7 @@ public class AuthIntegrationTest {
         int responseCode = HttpRequest.post(getUrl("/api/code"))
                                    .contentType(MediaType.APPLICATION_JSON_VALUE)
                                    .accept(MediaType.APPLICATION_JSON_VALUE)
-                                   .send(objectMapper.writeValueAsString(TelAndCode.builder().setTel("13426777850").build()))
+                                   .send(objectMapper.writeValueAsString(TelAndCode.builder().setTel("13426777855").build()))
                                    .code();
         Assertions.assertEquals(HTTP_OK, responseCode);
     }
@@ -73,13 +73,13 @@ public class AuthIntegrationTest {
 
         // 2. code
         HttpResponse http2 = getHttpResponseFromSendHttp(false, "/api/code",
-                TelAndCode.builder().setTel("13426777850").build(),
+                TelAndCode.builder().setTel("13426777856").build(),
                 null);
         Assertions.assertEquals(HTTP_OK, http2.getCode());
 
         // 3. login
         HttpResponse http3 = getHttpResponseFromSendHttp(false, "/api/login",
-                TelAndCode.create("13426777850", "000000"),
+                TelAndCode.create("13426777856", "000000"),
                 null);
         Assertions.assertEquals(HTTP_OK, http3.getCode());
         String cookie = http3.getHeaders().get("Set-Cookie").stream().filter(l -> l.contains("JSESSIONID")).findFirst().get();
@@ -89,7 +89,7 @@ public class AuthIntegrationTest {
         Assertions.assertEquals(HTTP_OK, http4.getCode());
         LoginResult loginResult = new ObjectMapper().readValue(http4.getBody(), LoginResult.class);
         Assertions.assertTrue(loginResult != null && loginResult.login());
-        Assertions.assertEquals("13426777850", Objects.requireNonNull(loginResult.user()).getTel());
+        Assertions.assertEquals("13426777856", Objects.requireNonNull(loginResult.user()).getTel());
 
         // 5. logout
         HttpResponse http5 = getHttpResponseFromSendHttp(true, "/api/logout", null, cookie);
