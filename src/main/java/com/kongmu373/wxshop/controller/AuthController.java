@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class AuthController {
 
     private final AuthService authService;

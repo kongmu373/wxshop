@@ -14,7 +14,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.servlet.Filter;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Configuration
@@ -33,18 +35,23 @@ public class ShiroConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager, ShiroLoginFilter shiroLoginFilter) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 
         shiroFilterFactoryBean.setSecurityManager(securityManager);
+        Map<String, Filter> filtersMap = new LinkedHashMap<>();
+        filtersMap.put("shiroLoginFilter", shiroLoginFilter);
+
+        shiroFilterFactoryBean.setFilters(filtersMap);
 
         Map<String, String> pattern = new HashMap<>();
-        pattern.put("/api/code", "anon");
-        pattern.put("/api/login", "anon");
-        pattern.put("/api/status", "anon");
+        pattern.put("/api/v1/code", "anon");
+        pattern.put("/api/v1/login", "anon");
+        pattern.put("/api/v1/status", "anon");
+        pattern.put("/api/v1/logout", "anon");
         pattern.put("/**", "authc");
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(pattern);
 
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(pattern);
         return shiroFilterFactoryBean;
     }
 

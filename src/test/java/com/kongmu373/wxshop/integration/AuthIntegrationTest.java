@@ -21,6 +21,7 @@ import java.util.Objects;
 
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static java.net.HttpURLConnection.HTTP_OK;
+import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = WxshopApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -37,7 +38,7 @@ public class AuthIntegrationTest {
 
     @Test
     public void returnHttpOKWhenParameterIsCorrect() throws JsonProcessingException {
-        int responseCode = HttpRequest.post(getUrl("/api/code"))
+        int responseCode = HttpRequest.post(getUrl("/api/v1/code"))
                                    .contentType(MediaType.APPLICATION_JSON_VALUE)
                                    .accept(MediaType.APPLICATION_JSON_VALUE)
                                    .send(objectMapper.writeValueAsString(TelAndCode.builder().setTel("13426777855").build()))
@@ -47,7 +48,7 @@ public class AuthIntegrationTest {
 
     @Test
     public void returnHttpBadRequestWhenParameterIsWrong() throws JsonProcessingException {
-        int responseCode = HttpRequest.post(getUrl("/api/code"))
+        int responseCode = HttpRequest.post(getUrl("/api/v1/code"))
                                    .contentType(MediaType.APPLICATION_JSON_VALUE)
                                    .accept(MediaType.APPLICATION_JSON_VALUE)
                                    .send(objectMapper.writeValueAsString(TelAndCode.builder().setTel("134267778501").build()))
@@ -66,40 +67,46 @@ public class AuthIntegrationTest {
             6. status
          */
         // 1. status  未登录
-        HttpResponse http1 = getHttpResponseFromSendHttp(true, "/api/status", null, null);
+        HttpResponse http1 = getHttpResponseFromSendHttp(true, "/api/v1/status", null, null);
         Assertions.assertEquals(HTTP_OK, http1.getCode());
         LoginResult value = new ObjectMapper().readValue(http1.getBody(), LoginResult.class);
         Assertions.assertFalse(value.login() != null && value.login());
 
         // 2. code
-        HttpResponse http2 = getHttpResponseFromSendHttp(false, "/api/code",
+        HttpResponse http2 = getHttpResponseFromSendHttp(false, "/api/v1/code",
                 TelAndCode.builder().setTel("13426777856").build(),
                 null);
         Assertions.assertEquals(HTTP_OK, http2.getCode());
 
         // 3. login
-        HttpResponse http3 = getHttpResponseFromSendHttp(false, "/api/login",
+        HttpResponse http3 = getHttpResponseFromSendHttp(false, "/api/v1/login",
                 TelAndCode.create("13426777856", "000000"),
                 null);
         Assertions.assertEquals(HTTP_OK, http3.getCode());
         String cookie = http3.getHeaders().get("Set-Cookie").stream().filter(l -> l.contains("JSESSIONID")).findFirst().get();
 
         // 4. status
-        HttpResponse http4 = getHttpResponseFromSendHttp(true, "/api/status", null, cookie);
+        HttpResponse http4 = getHttpResponseFromSendHttp(true, "/api/v1/status", null, cookie);
         Assertions.assertEquals(HTTP_OK, http4.getCode());
         LoginResult loginResult = new ObjectMapper().readValue(http4.getBody(), LoginResult.class);
         Assertions.assertTrue(loginResult != null && loginResult.login());
         Assertions.assertEquals("13426777856", Objects.requireNonNull(loginResult.user()).getTel());
 
         // 5. logout
-        HttpResponse http5 = getHttpResponseFromSendHttp(true, "/api/logout", null, cookie);
+        HttpResponse http5 = getHttpResponseFromSendHttp(true, "/api/v1/logout", null, cookie);
         Assertions.assertEquals(HTTP_OK, http5.getCode());
 
         // 6. status
-        HttpResponse http6 = getHttpResponseFromSendHttp(true, "/api/status", null, cookie);
+        HttpResponse http6 = getHttpResponseFromSendHttp(true, "/api/v1/status", null, cookie);
         Assertions.assertEquals(HTTP_OK, http6.getCode());
         LoginResult value6 = new ObjectMapper().readValue(http1.getBody(), LoginResult.class);
         Assertions.assertFalse(value6.login() != null && value6.login());
+    }
+
+    @Test
+    public void returnUnAuthorizedIfNotLogin() throws JsonProcessingException {
+        HttpResponse http = getHttpResponseFromSendHttp(true, "/api/v1/any", null, null);
+        Assertions.assertEquals(HTTP_UNAUTHORIZED, http.getCode());
     }
 
     private HttpResponse getHttpResponseFromSendHttp(boolean isGet, String apiName, Object requestBody, String cookie) throws JsonProcessingException {
