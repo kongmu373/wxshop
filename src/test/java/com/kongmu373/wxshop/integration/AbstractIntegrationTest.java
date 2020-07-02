@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.kongmu373.wxshop.result.HttpResponse;
+import com.kongmu373.wxshop.result.LoginResult;
 import com.kongmu373.wxshop.result.TelAndCode;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.configuration.ClassicConfiguration;
@@ -44,7 +45,7 @@ public class AbstractIntegrationTest {
         return "http://localhost:" + environment.getProperty("local.server.port") + apiName;
     }
 
-    public String loginAndGetCookie(String tel) throws JsonProcessingException {
+    public CookieAndUser loginAndGetCookie(String tel) throws JsonProcessingException {
         HttpResponse http = getHttpResponseFromSendHttp(HttpRequest.METHOD_POST, "/api/v1/code",
                 new ObjectMapper().writeValueAsString(TelAndCode.builder().setTel(tel).build()),
                 null);
@@ -54,8 +55,11 @@ public class AbstractIntegrationTest {
                 new ObjectMapper().writeValueAsString(TelAndCode.create(tel, "000000")),
                 null);
         Assertions.assertEquals(HTTP_OK, http2.getCode());
-
-        return http2.getHeaders().get("Set-Cookie").stream().filter(l -> l.contains("JSESSIONID")).findFirst().get();
+        String cookie = http2.getHeaders().get("Set-Cookie").stream().filter(l -> l.contains("JSESSIONID")).findFirst().get();
+        HttpResponse http3 = getHttpResponseFromSendHttp(HttpRequest.METHOD_GET, "/api/v1/status", null, cookie);
+        String userJSON = http3.getBody();
+        LoginResult loginResult = objectMapper.readValue(userJSON, LoginResult.class);
+        return new CookieAndUser(cookie, loginResult.user());
     }
 
 
@@ -70,6 +74,10 @@ public class AbstractIntegrationTest {
             request.send(requestBody);
         }
         return HttpResponse.create(request.code(), request.body(), request.headers());
+    }
+
+    protected void logout(String cookie) throws JsonProcessingException {
+        getHttpResponseFromSendHttp(HttpRequest.METHOD_GET, "/api/v1/logout", null, cookie);
     }
 
     private HttpRequest createRequest(String url, String method) {

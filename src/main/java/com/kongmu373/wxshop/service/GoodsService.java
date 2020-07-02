@@ -2,15 +2,14 @@ package com.kongmu373.wxshop.service;
 
 import com.kongmu373.wxshop.dao.GoodsDao;
 import com.kongmu373.wxshop.dao.ShopDao;
-import com.kongmu373.wxshop.entity.ErrorMessage;
-import com.kongmu373.wxshop.exception.ErrorException;
+import com.kongmu373.wxshop.exception.BadRequestException;
+import com.kongmu373.wxshop.exception.ForbiddenException;
 import com.kongmu373.wxshop.exception.NotFoundException;
 import com.kongmu373.wxshop.generated.Goods;
 import com.kongmu373.wxshop.generated.Shop;
 import com.kongmu373.wxshop.generated.User;
 import com.kongmu373.wxshop.result.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -33,7 +32,7 @@ public class GoodsService {
 
     public Goods createGoods(Goods goods, User currentUser) {
         if (goods == null) {
-            throw new ErrorException(ErrorMessage.GOODS_BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
+            throw new BadRequestException();
         }
         validGoodsIsNotBelongToCurrentUser(goods, currentUser);
         createClean(goods);
@@ -60,9 +59,9 @@ public class GoodsService {
     }
 
     private void validGoodsIsNotBelongToCurrentUser(Goods goods, User currentUser) {
-        Shop shop = shopDao.selectById(goods.getShopId());
-        if (shop == null || currentUser == null || !Objects.equals(shop.getOwnerUserId(), currentUser.getId())) {
-            throw new ErrorException(ErrorMessage.FORBIDDEN, HttpStatus.FORBIDDEN.value());
+        Shop shop = shopDao.selectById(goods.getShopId()).orElseThrow(ForbiddenException::new);
+        if ( currentUser == null || !Objects.equals(shop.getOwnerUserId(), currentUser.getId())) {
+            throw new ForbiddenException();
         }
     }
 
