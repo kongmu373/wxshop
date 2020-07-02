@@ -1,7 +1,6 @@
 package com.kongmu373.wxshop.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.kongmu373.wxshop.WxshopApplication;
 import com.kongmu373.wxshop.result.HttpResponse;
@@ -41,8 +40,8 @@ public class GoodsIntegrationTest extends AbstractIntegrationTest {
         7. getAllGoods
          */
         // 1-2 code and login  get the cookie .
-        String cookie = loginAndGetCookie("13426777850");
-        String cookie2 = loginAndGetCookie("13426777854");
+        String cookie = loginAndGetCookie("13426777850").getCookie();
+        String cookie2 = loginAndGetCookie("13426777854").getCookie();
         // 3. create
         // 3.1 normal
         HttpResponse createHttp = getHttpResponseFromSendHttp(HttpRequest.METHOD_POST,
@@ -107,7 +106,7 @@ public class GoodsIntegrationTest extends AbstractIntegrationTest {
         // 4.1 normal
         String createGoodsJSON = createHttp.getBody();
 
-        Result result = new ObjectMapper().readValue(createGoodsJSON, Result.class);
+        Result result = objectMapper.readValue(createGoodsJSON, Result.class);
         LinkedHashMap<String, Object> createGoods = (LinkedHashMap<String, Object>) (result.data());
         HttpResponse updateHttp = getHttpResponseFromSendHttp(HttpRequest.METHOD_POST, "/api/v1/goods/" + createGoods.get("id"),
                 "{ \n"
@@ -159,14 +158,14 @@ public class GoodsIntegrationTest extends AbstractIntegrationTest {
         // 6. getListGoods
         HttpResponse getGoodsListHttp = getHttpResponseFromSendHttp(HttpRequest.METHOD_GET, "/api/v1/goods?pageNum=1&pageSize=2", null, cookie);
         Assertions.assertEquals(HTTP_OK, getGoodsListHttp.getCode());
-        PageResult pageResult = new ObjectMapper().readValue(getGoodsListHttp.getBody(), PageResult.class);
+        PageResult pageResult = objectMapper.readValue(getGoodsListHttp.getBody(), PageResult.class);
         Assertions.assertEquals(1, pageResult.pageNum());
         Assertions.assertEquals(2, pageResult.pageSize());
         Assertions.assertNotNull(pageResult.totalPage());
 
         HttpResponse getGoodsListHttp2 = getHttpResponseFromSendHttp(HttpRequest.METHOD_GET, "/api/v1/goods?pageNum=1&pageSize=2&shopId=1", null, cookie);
         Assertions.assertEquals(HTTP_OK, getGoodsListHttp2.getCode());
-        PageResult pageResult2 = new ObjectMapper().readValue(getGoodsListHttp2.getBody(), PageResult.class);
+        PageResult pageResult2 = objectMapper.readValue(getGoodsListHttp2.getBody(), PageResult.class);
         List<LinkedHashMap<String, Object>> list = pageResult2.data();
         Assertions.assertEquals(1, pageResult2.pageNum());
         Assertions.assertEquals(2, pageResult2.pageSize());
