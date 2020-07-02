@@ -61,7 +61,7 @@
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring-boot-starter</artifactId>
-            <version>1.4.2</version>
+            <version>1.5.3</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
@@ -86,7 +86,17 @@
             <artifactId>auto-value-annotations</artifactId>
             <version>${auto-value.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>6.3.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -247,7 +257,7 @@
                             <longModulepath>false</longModulepath>
                             <executable>sleep</executable>
                             <arguments>
-                                <argument>40</argument>
+                                <argument>60</argument>
                             </arguments>
                         </configuration>
                     </execution>

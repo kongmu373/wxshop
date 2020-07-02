@@ -12,5 +12,5 @@ CREATE TABLE USER (
   COLLATE = utf8mb4_unicode_ci;
 
 INSERT INTO USER (NAME, TEL, AVATAR_URL, ADDRESS)
-VALUES('kongmu', '13426777854', 'http://url', '火星');
+VALUES('kongmu', '13426777850', 'http://url', '火星');
 

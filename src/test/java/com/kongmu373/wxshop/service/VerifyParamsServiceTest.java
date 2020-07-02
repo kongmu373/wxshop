@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class VerifyParamsServiceTest {
+public class VerifyParamsServiceTest {
     private final String CORRECT_TEL = "13426777851";
     private final VerifyParamsService verifyParamsService = new VerifyParamsService();
 

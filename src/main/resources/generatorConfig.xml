@@ -43,6 +43,7 @@
         <table schema="wxshop" tableName="GOODS" domainObjectName="Goods" >
             <property name="useActualColumnNames" value="false"/>
             <generatedKey column="ID" sqlStatement="MySql" identity="true" />
+            <columnOverride column="DETAILS" jdbcType="VARCHAR"></columnOverride>
         </table>
         <table schema="wxshop" tableName="SHOPPING_CART" domainObjectName="ShoppingCart" >
             <property name="useActualColumnNames" value="false"/>
