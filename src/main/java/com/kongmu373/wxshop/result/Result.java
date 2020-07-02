@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.auto.value.AutoValue;
 
+import javax.annotation.Nullable;
+
 @AutoValue
 @JsonSerialize(as = Result.class)
 @JsonDeserialize(builder = AutoValue_Result.Builder.class)
@@ -13,9 +15,11 @@ import com.google.auto.value.AutoValue;
 public abstract class Result<T> {
 
     @JsonProperty("message")
+    @Nullable
     public abstract String message();
 
     @JsonProperty("data")
+    @Nullable
     public abstract T data();
 
     public static <T> Result<T> create(String message, T data) {
@@ -32,8 +36,10 @@ public abstract class Result<T> {
 
     @AutoValue.Builder
     public abstract static class Builder<T> {
+        @JsonProperty("message")
         public abstract Builder<T> message(String message);
 
+        @JsonProperty("data")
         public abstract Builder<T> data(T data);
 
         public abstract Result<T> build();

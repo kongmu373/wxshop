@@ -8,7 +8,7 @@ CREATE TABLE GOODS
     IMG_URL     VARCHAR(1024),
     PRICE       BIGINT,   -- 单位 分
     STOCK       INT  NOT NULL DEFAULT 0,
-    STATUS      VARCHAR(16),    -- 'OK' 正常 'deleted' 已经删除
+    STATUS      VARCHAR(16),    -- 'ok' 正常 'deleted' 已经删除
     CREATED_AT  TIMESTAMP NOT NULL DEFAULT NOW(),
     UPDATED_AT  TIMESTAMP NOT NULL DEFAULT NOW()
 ) ENGINE = InnoDB

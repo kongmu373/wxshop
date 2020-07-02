@@ -3,6 +3,7 @@ package com.kongmu373.wxshop.config;
 
 import com.kongmu373.wxshop.interceptor.AuthServiceInterceptor;
 import com.kongmu373.wxshop.service.ShiroRealm;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -38,7 +39,6 @@ public class ShiroConfig implements WebMvcConfigurer {
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager, ShiroLoginFilter shiroLoginFilter) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 
-        shiroFilterFactoryBean.setSecurityManager(securityManager);
         Map<String, Filter> filtersMap = new LinkedHashMap<>();
         filtersMap.put("shiroLoginFilter", shiroLoginFilter);
 
@@ -52,6 +52,7 @@ public class ShiroConfig implements WebMvcConfigurer {
         pattern.put("/**", "authc");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(pattern);
+        shiroFilterFactoryBean.setSecurityManager(securityManager);
         return shiroFilterFactoryBean;
     }
 
@@ -64,6 +65,7 @@ public class ShiroConfig implements WebMvcConfigurer {
         securityManager.setCacheManager(new MemoryConstrainedCacheManager());
         // 设置Session
         securityManager.setSessionManager(new DefaultWebSessionManager());
+        SecurityUtils.setSecurityManager(securityManager);
         return securityManager;
     }
 

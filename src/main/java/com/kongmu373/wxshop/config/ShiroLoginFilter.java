@@ -1,5 +1,8 @@
 package com.kongmu373.wxshop.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kongmu373.wxshop.entity.ErrorMessage;
+import com.kongmu373.wxshop.result.Result;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -17,6 +20,7 @@ public class ShiroLoginFilter extends FormAuthenticationFilter {
         httpServletResponse.setCharacterEncoding("UTF-8");
         httpServletResponse.setContentType("application/json");
         httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+        httpServletResponse.getWriter().print(new ObjectMapper().writeValueAsString(Result.create(ErrorMessage.UNAUTHORIZED, null)));
         return false;
     }
 }
