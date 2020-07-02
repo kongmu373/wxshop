@@ -1,7 +1,6 @@
 package com.kongmu373.wxshop.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.kongmu373.wxshop.WxshopApplication;
 import com.kongmu373.wxshop.result.HttpResponse;
@@ -61,14 +60,14 @@ public class AuthIntegrationTest extends AbstractIntegrationTest {
         // 1. status  未登录
         HttpResponse http1 = getHttpResponseFromSendHttp(HttpRequest.METHOD_GET, "/api/v1/status", null, null);
         Assertions.assertEquals(HTTP_OK, http1.getCode());
-        LoginResult value = new ObjectMapper().readValue(http1.getBody(), LoginResult.class);
+        LoginResult value = objectMapper.readValue(http1.getBody(), LoginResult.class);
         Assertions.assertFalse(value.login() != null && value.login());
 
-        String cookie = loginAndGetCookie("13426777856");
+        String cookie = loginAndGetCookie("13426777856").getCookie();
         // 4. status
         HttpResponse http4 = getHttpResponseFromSendHttp(HttpRequest.METHOD_GET, "/api/v1/status", null, cookie);
         Assertions.assertEquals(HTTP_OK, http4.getCode());
-        LoginResult loginResult = new ObjectMapper().readValue(http4.getBody(), LoginResult.class);
+        LoginResult loginResult = objectMapper.readValue(http4.getBody(), LoginResult.class);
         Assertions.assertTrue(loginResult != null && loginResult.login());
         Assertions.assertEquals("13426777856", Objects.requireNonNull(loginResult.user()).getTel());
 
@@ -79,7 +78,7 @@ public class AuthIntegrationTest extends AbstractIntegrationTest {
         // 6. status
         HttpResponse http6 = getHttpResponseFromSendHttp(HttpRequest.METHOD_GET, "/api/v1/status", null, cookie);
         Assertions.assertEquals(HTTP_OK, http6.getCode());
-        LoginResult value6 = new ObjectMapper().readValue(http6.getBody(), LoginResult.class);
+        LoginResult value6 = objectMapper.readValue(http6.getBody(), LoginResult.class);
         Assertions.assertFalse(value6.login() != null && value6.login());
     }
 
