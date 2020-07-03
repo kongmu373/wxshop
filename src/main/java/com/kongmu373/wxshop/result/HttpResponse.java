@@ -28,6 +28,7 @@ public abstract class HttpResponse {
     }
 
 
+
     @AutoValue.Builder
     public abstract static class Builder {
         public abstract Builder setCode(int newCode);

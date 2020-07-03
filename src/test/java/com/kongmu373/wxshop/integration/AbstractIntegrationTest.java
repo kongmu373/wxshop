@@ -1,6 +1,7 @@
 package com.kongmu373.wxshop.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.kongmu373.wxshop.result.HttpResponse;
@@ -39,6 +40,11 @@ public class AbstractIntegrationTest {
     }
 
     public static ObjectMapper objectMapper = new ObjectMapper();
+
+    public static <T> T asJsonObject(String body, TypeReference<T> typeReference) throws JsonProcessingException {
+        T result = objectMapper.readValue(body, typeReference);
+        return result;
+    }
 
     public String getUrl(String apiName) {
         // 获取集成测试的端口号
