@@ -6,12 +6,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.auto.value.AutoValue;
 import com.kongmu373.wxshop.generated.Shop;
 
+import java.io.Serializable;
 import java.util.List;
 
 @AutoValue
 @JsonSerialize(as = ShopCartData.class)
 @JsonDeserialize(builder = AutoValue_ShopCartData.Builder.class)
-public abstract class ShopCartData {
+public abstract class ShopCartData implements Serializable {
 
     @JsonProperty("shop")
     public abstract Shop shop();

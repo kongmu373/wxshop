@@ -4,11 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.kongmu373.wxshop.WxshopApplication;
 import com.kongmu373.wxshop.entity.AddToShoppingCartItem;
-import com.kongmu373.wxshop.entity.ShopCartData;
 import com.kongmu373.wxshop.entity.ShopCartRequest;
 import com.kongmu373.wxshop.result.HttpResponse;
 import com.kongmu373.wxshop.result.PageResult;
 import com.kongmu373.wxshop.result.Result;
+import org.assertj.core.util.Sets;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -58,9 +59,29 @@ public class CartIntegrationTest extends AbstractIntegrationTest {
         HttpResponse post = getHttpResponseFromSendHttp("POST", API_PREFIX,
                 objectMapper.writeValueAsString(shopCartRequest),
                 cookieAndUser.getCookie());
-        Result<ShopCartData> result = objectMapper.readValue(post.getBody(), new TypeReference<Result<ShopCartData>>() {
+        Result<LinkedHashMap> result = asJsonObject(post.getBody(), new TypeReference<Result<LinkedHashMap>>() {
         });
 
-        System.out.println();
+
+        Assertions.assertEquals(1, ((LinkedHashMap) result.data().get("shop")).get("id"));
+        Assertions.assertEquals(Sets.newHashSet(Arrays.asList(1, 2)), ((ArrayList) result.data().get("goods")).stream().map(goods -> ((LinkedHashMap) goods).get("id")).collect(Collectors.toSet()));
+        Assertions.assertEquals(Sets.newHashSet(Arrays.asList(2, 2)), ((ArrayList) result.data().get("goods")).stream().map(goods -> ((LinkedHashMap) goods).get("number")).collect(Collectors.toSet()));
+        Assertions.assertTrue(((ArrayList) result.data().get("goods")).stream().allMatch(goods -> ((LinkedHashMap) goods).get("shopId").equals(1)));
+    }
+
+    @Test
+    public void deleteCart() throws JsonProcessingException {
+        CookieAndUser cookieAndUser = loginAndGetCookie("13426777850");
+        HttpResponse delete = getHttpResponseFromSendHttp("DELETE", API_PREFIX + "/5",
+                null,
+                cookieAndUser.getCookie());
+        Result<LinkedHashMap> result = asJsonObject(delete.getBody(), new TypeReference<Result<LinkedHashMap>>() {
+        });
+        Assertions.assertEquals(2, ((LinkedHashMap) result.data().get("shop")).get("id"));
+        Assertions.assertEquals(1, ((ArrayList) result.data().get("goods")).size());
+        Assertions.assertEquals(4, ((LinkedHashMap) ((ArrayList) result.data().get("goods")).get(0)).get("id"));
+        Assertions.assertEquals(200, ((LinkedHashMap) ((ArrayList) result.data().get("goods")).get(0)).get("number"));
+
+
     }
 }

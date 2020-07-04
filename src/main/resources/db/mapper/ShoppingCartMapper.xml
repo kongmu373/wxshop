@@ -258,7 +258,7 @@ select t1.ID          id,
        t2.CREATED_AT  createdAt,
        t2.UPDATED_AT  updatedAt
 from GOODS t1
-         inner join SHOPPING_CART t2
+         inner join (select * from SHOPPING_CART where STATUS = 'ok') t2
                     on t1.ID = t2.GOODS_ID
          inner join (select DISTINCT SHOP_ID
                      from SHOPPING_CART
@@ -278,7 +278,7 @@ select t1.ID          id,
        t2.CREATED_AT  createdAt,
        t2.UPDATED_AT  updatedAt
 from GOODS t1
-         inner join SHOPPING_CART t2
+         inner join (select * from SHOPPING_CART where STATUS = 'ok') t2
                     on t1.ID = t2.GOODS_ID
          inner join (select DISTINCT SHOP_ID
                      from SHOPPING_CART

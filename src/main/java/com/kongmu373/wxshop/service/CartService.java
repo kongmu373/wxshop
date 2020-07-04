@@ -88,12 +88,12 @@ public class CartService {
             sqlSession.commit();
         }
         ShopCartData collect = cartDao.selectShoppingCartDataByUserIdShopId(UserContext.getCurrentUser().getId(), shoppingCartRows.get(0).getShopId())
-                                             .stream()
-                                             .collect(groupingBy(ShopCartItem::getShopId))
-                                             .entrySet()
-                                             .stream()
-                                             .map(this::getShopCartItem)
-                                             .findFirst().orElseThrow(NotFoundException::new);
+                                       .stream()
+                                       .collect(groupingBy(ShopCartItem::getShopId))
+                                       .entrySet()
+                                       .stream()
+                                       .map(this::getShopCartItem)
+                                       .findFirst().orElseThrow(NotFoundException::new);
         // 3. 显示已添加的购物车
         return Result.create(null, collect);
 
@@ -117,5 +117,21 @@ public class CartService {
         shopCart.setCreatedAt(new Date());
         shopCart.setUpdatedAt(new Date());
         return shopCart;
+    }
+
+    public Result<ShopCartData> deleteShopCart(long goodId) {
+        Goods goods = goodsService.getGoods(goodId);
+        if (goods == null) {
+            throw new NotFoundException();
+        }
+        cartDao.deleteByGoodIdAndUserId(goodId, UserContext.getCurrentUser().getId());
+        ShopCartData collect = cartDao.selectShoppingCartDataByUserIdShopId(UserContext.getCurrentUser().getId(), goods.getShopId())
+                                       .stream()
+                                       .collect(groupingBy(ShopCartItem::getShopId))
+                                       .entrySet()
+                                       .stream()
+                                       .map(this::getShopCartItem)
+                                       .findFirst().orElseThrow(NotFoundException::new);
+        return Result.create(null, collect);
     }
 }

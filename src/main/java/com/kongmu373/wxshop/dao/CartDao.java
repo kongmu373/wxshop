@@ -1,10 +1,13 @@
 package com.kongmu373.wxshop.dao;
 
 import com.kongmu373.wxshop.entity.ShopCartItem;
+import com.kongmu373.wxshop.generated.ShoppingCart;
+import com.kongmu373.wxshop.generated.ShoppingCartExample;
 import com.kongmu373.wxshop.generated.ShoppingCartMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -27,4 +30,16 @@ public class CartDao {
     public List<ShopCartItem> selectShoppingCartDataByUserIdShopId(Long userId, Long shopId) {
         return shoppingCartMapper.selectShoppingCartDataByUserIdShopId(userId, shopId);
     }
+
+    public int deleteByGoodIdAndUserId(long goodId, Long id) {
+        ShoppingCartExample example = new ShoppingCartExample();
+
+        example.createCriteria().andGoodsIdEqualTo(goodId)
+                .andUserIdEqualTo(id);
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setStatus("deleted");
+        shoppingCart.setUpdatedAt(new Date());
+        return shoppingCartMapper.updateByExampleSelective(shoppingCart, example);
+    }
+
 }
