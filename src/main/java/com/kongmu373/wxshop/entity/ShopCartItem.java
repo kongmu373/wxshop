@@ -1,44 +1,21 @@
 package com.kongmu373.wxshop.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.auto.value.AutoValue;
-import com.kongmu373.wxshop.generated.Shop;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.kongmu373.wxshop.generated.Goods;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
+@AllArgsConstructor
+@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class ShopCartItem extends Goods {
+    private Long number;
 
-@AutoValue
-@JsonSerialize(as = ShopCartItem.class)
-@JsonDeserialize(builder = AutoValue_ShopCartItem.Builder.class)
-public abstract class ShopCartItem {
-
-    @JsonProperty("shop")
-    public abstract Shop shop();
-
-    @JsonProperty("goods")
-    public abstract List<ShopCartData> goods();
-
-    public static ShopCartItem create(Shop shop, List<ShopCartData> goods) {
-        return builder()
-                       .shop(shop)
-                       .goods(goods)
-                       .build();
+    public Long getNumber() {
+        return number;
     }
 
-    public static Builder builder() {
-        return new AutoValue_ShopCartItem.Builder();
-    }
-
-
-    @AutoValue.Builder
-    public abstract static class Builder {
-        @JsonProperty("shop")
-        public abstract Builder shop(Shop shop);
-
-        @JsonProperty("goods")
-        public abstract Builder goods(List<ShopCartData> goods);
-
-        public abstract ShopCartItem build();
+    public void setNumber(Long number) {
+        this.number = number;
     }
 }

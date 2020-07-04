@@ -1,6 +1,6 @@
 package com.kongmu373.wxshop.dao;
 
-import com.kongmu373.wxshop.entity.ShopCartData;
+import com.kongmu373.wxshop.entity.ShopCartItem;
 import com.kongmu373.wxshop.generated.ShoppingCartMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,11 @@ public class CartDao {
         return shoppingCartMapper.getCountShopsInShopCart(id);
     }
 
-    public List<ShopCartData> getCartDataList(long userId, int pageNum, int pageSize) {
+    public List<ShopCartItem> getCartDataList(long userId, int pageNum, int pageSize) {
         return shoppingCartMapper.getCartDataList(userId, (pageNum - 1) * pageSize, pageSize);
+    }
+
+    public List<ShopCartItem> selectShoppingCartDataByUserIdShopId(Long userId, Long shopId) {
+        return shoppingCartMapper.selectShoppingCartDataByUserIdShopId(userId, shopId);
     }
 }

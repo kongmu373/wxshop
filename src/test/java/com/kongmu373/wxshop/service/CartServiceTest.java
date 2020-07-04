@@ -1,8 +1,8 @@
 package com.kongmu373.wxshop.service;
 
 import com.kongmu373.wxshop.dao.CartDao;
-import com.kongmu373.wxshop.entity.ShopCartData;
 import com.kongmu373.wxshop.entity.ShopCartItem;
+import com.kongmu373.wxshop.entity.ShopCartData;
 import com.kongmu373.wxshop.entity.UserContext;
 import com.kongmu373.wxshop.generated.User;
 import com.kongmu373.wxshop.result.PageResult;
@@ -38,10 +38,10 @@ public class CartServiceTest {
     @Test
     public void getCartTest() {
         int totalShopInCart = 3;
-        List<ShopCartData> listData = Mockito.mock(List.class);
+        List<ShopCartItem> listData = Mockito.mock(List.class);
         when(cartDao.getCountShopsInShopCart(1L)).thenReturn(totalShopInCart);
         when(cartDao.getCartDataList(1L, 1, 2)).thenReturn(listData);
-        PageResult<ShopCartItem> cart = cartService.getCart(1, 2);
+        PageResult<ShopCartData> cart = cartService.getCart(1, 2);
         Assertions.assertEquals(1, cart.pageNum());
         Assertions.assertEquals(2, cart.pageSize());
         Assertions.assertEquals(2, cart.totalPage());

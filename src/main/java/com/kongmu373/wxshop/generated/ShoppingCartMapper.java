@@ -1,9 +1,8 @@
 package com.kongmu373.wxshop.generated;
 
 import java.util.List;
-import java.util.Map;
 
-import com.kongmu373.wxshop.entity.ShopCartData;
+import com.kongmu373.wxshop.entity.ShopCartItem;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -99,7 +98,9 @@ public interface ShoppingCartMapper {
 
     int getCountShopsInShopCart(Long id);
 
-    List<ShopCartData> getCartDataList(@Param("userId") long userId,
+    List<ShopCartItem> getCartDataList(@Param("userId") long userId,
                                        @Param("offset") int offset,
                                        @Param("pageSize") int pageSize);
+
+    List<ShopCartItem> selectShoppingCartDataByUserIdShopId(@Param("userId") Long userId, @Param("shopId") Long shopId);
 }

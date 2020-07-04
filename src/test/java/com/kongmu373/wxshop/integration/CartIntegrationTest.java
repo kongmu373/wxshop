@@ -3,8 +3,12 @@ package com.kongmu373.wxshop.integration;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.kongmu373.wxshop.WxshopApplication;
+import com.kongmu373.wxshop.entity.AddToShoppingCartItem;
+import com.kongmu373.wxshop.entity.ShopCartData;
+import com.kongmu373.wxshop.entity.ShopCartRequest;
 import com.kongmu373.wxshop.result.HttpResponse;
 import com.kongmu373.wxshop.result.PageResult;
+import com.kongmu373.wxshop.result.Result;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,5 +46,21 @@ public class CartIntegrationTest extends AbstractIntegrationTest {
         Assertions.assertEquals(Arrays.asList(100, 200), goods.stream().map(item -> ((LinkedHashMap) item).get("price")).collect(Collectors.toList()));
         Assertions.assertEquals(Arrays.asList(200, 300), goods.stream().map(item -> ((LinkedHashMap) item).get("number")).collect(Collectors.toList()));
 
+    }
+
+    @Test
+    public void addCart() throws JsonProcessingException {
+        CookieAndUser cookieAndUser = loginAndGetCookie("13426777850");
+        AddToShoppingCartItem item = AddToShoppingCartItem.create(2L, 2);
+        AddToShoppingCartItem item2 = AddToShoppingCartItem.create(1L, 2);
+
+        ShopCartRequest shopCartRequest = ShopCartRequest.create(Arrays.asList(item, item2));
+        HttpResponse post = getHttpResponseFromSendHttp("POST", API_PREFIX,
+                objectMapper.writeValueAsString(shopCartRequest),
+                cookieAndUser.getCookie());
+        Result<ShopCartData> result = objectMapper.readValue(post.getBody(), new TypeReference<Result<ShopCartData>>() {
+        });
+
+        System.out.println();
     }
 }
