@@ -48,4 +48,6 @@ public class ShopController {
     public Result<Shop> getShop(@PathVariable("id") Long id) {
         return shopService.getShop(id);
     }
+
+
 }

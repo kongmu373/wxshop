@@ -2,7 +2,6 @@ package com.kongmu373.wxshop.generated;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
@@ -10,7 +9,6 @@ import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Goods implements Serializable {
     /**

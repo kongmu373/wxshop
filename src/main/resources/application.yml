@@ -8,7 +8,7 @@ spring:
 
 mybatis:
   mapper-locations: classpath*:db/mapper/*.xml
-  type-aliases-package: com.kongmu373.wxshop.generated
+  type-aliases-package: com.kongmu373.wxshop.generated,com.kongmu373.wxshop.entity,com.kongmu373.wxshop.result
   config-location: classpath:db/config.xml
 
 # logging

@@ -7,12 +7,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nullable;
+import java.io.Serializable;
 
 @AutoValue
 @JsonSerialize(as = Result.class)
 @JsonDeserialize(builder = AutoValue_Result.Builder.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public abstract class Result<T> {
+public abstract class Result<T> implements Serializable {
 
     @JsonProperty("message")
     @Nullable
