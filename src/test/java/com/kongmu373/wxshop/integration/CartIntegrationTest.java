@@ -34,7 +34,6 @@ public class CartIntegrationTest extends AbstractIntegrationTest {
         HttpResponse get = getHttpResponseFromSendHttp("GET", API_PREFIX + "?pageNum=2&pageSize=1", null, cookieAndUser.getCookie());
         PageResult<LinkedHashMap> result = asJsonObject(get.getBody(), new TypeReference<PageResult<LinkedHashMap>>() {
         });
-        System.out.println();
         LinkedHashMap shopCartItem = result.data().get(0);
         LinkedHashMap shop = (LinkedHashMap) shopCartItem.get("shop");
         List goods = (List) shopCartItem.get("goods");
