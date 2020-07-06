@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: wxshop-order
+  datasource:
+    url: jdbc:mysql://localhost:3306/wxshop?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123
+wxshop:
+  orderservice:
+    version: 0.0.1
+
+server:
+  port: 8081
+
+dubbo:
+  registry:
+    address: zookeeper://localhost:2381
+  scan:
+    base-packages: com.kongmu373.wxshop.order.service
