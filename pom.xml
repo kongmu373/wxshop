@@ -101,6 +101,15 @@
             <version>6.3.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.crazycake</groupId>
+            <artifactId>shiro-redis</artifactId>
+            <version>3.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -248,6 +257,26 @@
                                 <argument>3307:3306</argument>
                                 <argument>-d</argument>
                                 <argument>mysql:5.7.27</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>start-test-redis</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <longModulepath>false</longModulepath>
+                            <executable>docker</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>--name</argument>
+                                <argument>test-redis</argument>
+                                <argument>-p</argument>
+                                <argument>6380:6379</argument>
+                                <argument>-d</argument>
+                                <argument>redis</argument>
                             </arguments>
                         </configuration>
                     </execution>

@@ -4,18 +4,29 @@ import com.kongmu373.wxshop.dao.UserDao;
 import com.kongmu373.wxshop.generated.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserService {
 
     private final UserDao userDao;
 
+    private RedisTemplate<Object, Object> template;
+
+    private static final String PREFFIX = "tel:";
+
+    private static final Random RANDOM = new Random();
+
     @Autowired
-    public UserService(UserDao userDao) {
+    public UserService(UserDao userDao, RedisTemplate<Object, Object> template) {
         this.userDao = userDao;
+        this.template = template;
     }
 
 
@@ -33,6 +44,8 @@ public class UserService {
         user.setUpdatedAt(new Date());
         try {
             userDao.insertUser(user);
+            // 清空缓存
+            template.delete(PREFFIX + tel);
         } catch (DuplicateKeyException e) {
             return userDao.getUserByTel(tel);
         }
@@ -40,6 +53,13 @@ public class UserService {
     }
 
     public User getUserByTel(String tel) {
-        return userDao.getUserByTel(tel);
+        ValueOperations<Object, Object> op = template.opsForValue();
+        User user = (User) op.get(tel);
+        if (user == null) {
+            user = userDao.getUserByTel(tel);
+            op.set(PREFFIX + tel, user);
+            template.expire(PREFFIX + tel, RANDOM.nextInt(10) * 60, TimeUnit.SECONDS);
+        }
+        return user;
     }
 }
