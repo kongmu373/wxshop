@@ -1,5 +1,6 @@
 package com.kongmu373.wxshop.dao;
 
+import com.kongmu373.wxshop.entity.DataStatus;
 import com.kongmu373.wxshop.generate.Shop;
 import com.kongmu373.wxshop.generate.ShopExample;
 import com.kongmu373.wxshop.generate.ShopMapper;
@@ -23,13 +24,13 @@ public class ShopDao {
         ShopExample example = new ShopExample();
         example.createCriteria()
                 .andIdEqualTo(shopId)
-                .andStatusEqualTo("ok");
+                .andStatusEqualTo(DataStatus.OK.getName());
         return shopMapper.selectByExample(example).stream().findFirst();
     }
 
     public long countAllWithUser(Long id) {
         ShopExample example = new ShopExample();
-        example.createCriteria().andOwnerUserIdEqualTo(id).andStatusEqualTo("ok");
+        example.createCriteria().andOwnerUserIdEqualTo(id).andStatusEqualTo(DataStatus.OK.getName());
         return shopMapper.countByExample(example);
     }
 
@@ -37,7 +38,7 @@ public class ShopDao {
         ShopExample example = new ShopExample();
         example.setOffset((pageNum - 1) * pageSize);
         example.setLimit(pageSize);
-        example.createCriteria().andOwnerUserIdEqualTo(id).andStatusEqualTo("ok");
+        example.createCriteria().andOwnerUserIdEqualTo(id).andStatusEqualTo(DataStatus.OK.getName());
         return shopMapper.selectByExample(example);
     }
 
@@ -48,7 +49,7 @@ public class ShopDao {
     public void updateShop(Shop shop) {
         shop.setUpdatedAt(new Date());
         ShopExample example = new ShopExample();
-        example.createCriteria().andIdEqualTo(shop.getId()).andStatusEqualTo("ok");
+        example.createCriteria().andIdEqualTo(shop.getId()).andStatusEqualTo(DataStatus.OK.getName());
         shopMapper.updateByExampleSelective(shop, example);
     }
 }

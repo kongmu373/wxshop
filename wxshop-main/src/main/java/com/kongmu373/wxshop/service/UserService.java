@@ -17,7 +17,7 @@ public class UserService {
 
     private final UserDao userDao;
 
-    private RedisTemplate<Object, Object> template;
+    private final RedisTemplate<Object, Object> template;
 
     private static final String PREFFIX = "tel:";
 

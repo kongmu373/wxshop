@@ -1,6 +1,7 @@
 package com.kongmu373.wxshop.service;
 
 import com.kongmu373.wxshop.dao.ShopDao;
+import com.kongmu373.wxshop.entity.DataStatus;
 import com.kongmu373.wxshop.entity.UserContext;
 import com.kongmu373.wxshop.exception.ForbiddenException;
 import com.kongmu373.wxshop.exception.NotFoundException;
@@ -36,7 +37,7 @@ public class ShopService {
         shop.setOwnerUserId(UserContext.getCurrentUser().getId());
         shop.setCreatedAt(new Date());
         shop.setUpdatedAt(new Date());
-        shop.setStatus("ok");
+        shop.setStatus(DataStatus.OK.getName());
         shopDao.createShop(shop);
         shop.setStatus(null);
         return Result.create(null, shop);

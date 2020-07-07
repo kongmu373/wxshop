@@ -23,7 +23,7 @@
             <property name="trimStrings" value="true" />
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="db.mybatis"  targetProject="wxshop-order/src/main/resources">
+        <sqlMapGenerator targetPackage="db.mapper"  targetProject="wxshop-order/src/main/resources">
             <property name="enableSubPackages" value="true" />
         </sqlMapGenerator>
 

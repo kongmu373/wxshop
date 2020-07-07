@@ -7,9 +7,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kongmu373.wxshop.interceptor.AuthServiceInterceptor;
 import com.kongmu373.wxshop.service.ShiroRealm;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
@@ -21,25 +24,28 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.servlet.Filter;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import javax.sql.DataSource;
 
 @Configuration
 public class ShiroConfig implements WebMvcConfigurer {
 
+    private static final String COOKIE_NAME = "rememberMe"; //  cookie name
+
+    private static final int EXPIRY_TIME = 86400; // seconds
+
     @Autowired
     AuthServiceInterceptor authServiceInterceptor;
 
-    @Value("${wxshop.redis.host}")
+    @Value("${spring.redis.host}")
     String redisHost;
-    @Value("${wxshop.redis.port}")
+    @Value("${spring.redis.port}")
     int redisPort;
-
+    @Value("${spring.redis.timeout}")
+    int timeout;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -47,26 +53,16 @@ public class ShiroConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager, ShiroLoginFilter shiroLoginFilter) {
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-
-        Map<String, Filter> filtersMap = new LinkedHashMap<>();
-        filtersMap.put("shiroLoginFilter", shiroLoginFilter);
-
-        shiroFilterFactoryBean.setFilters(filtersMap);
-
-        Map<String, String> pattern = new HashMap<>();
-        pattern.put("/api/v1/code", "anon");
-        pattern.put("/api/v1/login", "anon");
-        pattern.put("/api/v1/status", "anon");
-        pattern.put("/api/v1/logout", "anon");
-        pattern.put("/**", "authc");
-
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(pattern);
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         return shiroFilterFactoryBean;
     }
 
+    @Bean
+    public DataSourceTransactionManager transactionManager(DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
+    }
 
     @Bean
     public DefaultWebSecurityManager mySecurityManager(ShiroRealm realm, RedisCacheManager redisCacheManager) {
@@ -76,8 +72,18 @@ public class ShiroConfig implements WebMvcConfigurer {
         securityManager.setCacheManager(redisCacheManager);
         // 设置Session
         securityManager.setSessionManager(new DefaultWebSessionManager());
+        securityManager.setRememberMeManager(rememberMeManager());
         SecurityUtils.setSecurityManager(securityManager);
         return securityManager;
+    }
+
+    public CookieRememberMeManager rememberMeManager() {
+        SimpleCookie cookie = new SimpleCookie(COOKIE_NAME);
+        cookie.setMaxAge(EXPIRY_TIME);
+        CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
+        cookieRememberMeManager.setCookie(cookie);
+        cookieRememberMeManager.setCipherKey(Base64.decode("3AvVhmFLUs0KTA3KaTHGFg=="));  // RememberMe cookie encryption key default AES algorithm of key length (128, 256, 512)
+        return cookieRememberMeManager;
     }
 
     @Bean
@@ -91,6 +97,7 @@ public class ShiroConfig implements WebMvcConfigurer {
     public RedisManager redisManager() {
         RedisManager redisManager = new RedisManager();
         redisManager.setHost(redisHost + ":" + redisPort);
+        redisManager.setTimeout(timeout);
         return redisManager;
     }
 

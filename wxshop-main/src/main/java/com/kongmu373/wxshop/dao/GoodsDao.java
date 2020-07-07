@@ -1,5 +1,6 @@
 package com.kongmu373.wxshop.dao;
 
+import com.kongmu373.wxshop.entity.DataStatus;
 import com.kongmu373.wxshop.generate.Goods;
 import com.kongmu373.wxshop.generate.GoodsExample;
 import com.kongmu373.wxshop.generate.GoodsMapper;
@@ -26,7 +27,7 @@ public class GoodsDao {
     public Optional<Goods> selectByPrimaryId(Long id) {
         GoodsExample example = new GoodsExample();
         GoodsExample.Criteria criteria = example.createCriteria();
-        criteria.andIdEqualTo(id).andStatusEqualTo("ok");
+        criteria.andIdEqualTo(id).andStatusEqualTo(DataStatus.OK.getName());
         return goodsMapper.selectByExample(example).stream().findFirst();
     }
 

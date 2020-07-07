@@ -13,4 +13,8 @@ public final class UserContext {
     public static User getCurrentUser() {
         return users.get();
     }
+
+    public static void clearCurrentUser() {
+        users.remove();
+    }
 }

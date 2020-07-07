@@ -3,6 +3,7 @@ package com.kongmu373.wxshop.service;
 import com.kongmu373.wxshop.dao.CartDao;
 import com.kongmu373.wxshop.dao.ShopDao;
 import com.kongmu373.wxshop.entity.AddToShoppingCartItem;
+import com.kongmu373.wxshop.entity.DataStatus;
 import com.kongmu373.wxshop.entity.ShopCartData;
 import com.kongmu373.wxshop.entity.ShopCartItem;
 import com.kongmu373.wxshop.entity.ShopCartRequest;
@@ -111,7 +112,7 @@ public class CartService {
         shopCart.setUserId(UserContext.getCurrentUser().getId());
         shopCart.setGoodsId(good.getId());
         shopCart.setShopId(good.getShopId());
-        shopCart.setStatus("ok");
+        shopCart.setStatus(DataStatus.OK.getName());
         shopCart.setCreatedAt(new Date());
         shopCart.setUpdatedAt(new Date());
         return shopCart;

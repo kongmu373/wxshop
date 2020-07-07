@@ -3,6 +3,7 @@ package com.kongmu373.wxshop.service;
 
 import com.kongmu373.wxshop.dao.GoodsDao;
 import com.kongmu373.wxshop.dao.ShopDao;
+import com.kongmu373.wxshop.entity.DataStatus;
 import com.kongmu373.wxshop.exception.ErrorException;
 import com.kongmu373.wxshop.generate.Goods;
 import com.kongmu373.wxshop.generate.Shop;
@@ -81,7 +82,7 @@ public class GoodsServiceTest {
         goods.setImgUrl("https://img.url");
         goods.setStock(10);
         goods.setPrice(500L);
-        goods.setStatus("ok");
+        goods.setStatus(DataStatus.OK.getName());
         User user = new User();
         user.setId(1L);
 
@@ -106,7 +107,7 @@ public class GoodsServiceTest {
         goods.setImgUrl("https://img.url");
         goods.setStock(10);
         goods.setPrice(500L);
-        goods.setStatus("ok");
+        goods.setStatus(DataStatus.OK.getName());
         Goods oldGoods = new Goods();
         goods.setId(1L);
         goods.setShopId(1L);

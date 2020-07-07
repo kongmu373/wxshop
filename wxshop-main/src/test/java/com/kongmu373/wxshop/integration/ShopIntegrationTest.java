@@ -39,7 +39,7 @@ public class ShopIntegrationTest extends AbstractIntegrationTest {
         Assertions.assertEquals(2, pageResult.data().size());
 
         logout(cookieAndUser.getCookie());
-        HttpResponse getWithUserLogout = getHttpResponseFromSendHttp("GET", API_PREFIX + "?pageNum=1&pageSize=5", null, cookieAndUser.getCookie());
+        HttpResponse getWithUserLogout = getHttpResponseFromSendHttp("GET", API_PREFIX + "?pageNum=1&pageSize=5", null, null);
         Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), getWithUserLogout.getCode());
     }
 

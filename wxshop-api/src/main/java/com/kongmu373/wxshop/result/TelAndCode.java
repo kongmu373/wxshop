@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.auto.value.AutoValue;
-import org.springframework.lang.Nullable;
 
+import javax.annotation.Nullable;
 import java.io.Serializable;
+
+;
 
 @AutoValue
 @JsonSerialize(as = TelAndCode.class)

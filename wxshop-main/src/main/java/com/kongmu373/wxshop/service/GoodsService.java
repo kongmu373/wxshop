@@ -2,6 +2,7 @@ package com.kongmu373.wxshop.service;
 
 import com.kongmu373.wxshop.dao.GoodsDao;
 import com.kongmu373.wxshop.dao.ShopDao;
+import com.kongmu373.wxshop.entity.DataStatus;
 import com.kongmu373.wxshop.exception.BadRequestException;
 import com.kongmu373.wxshop.exception.ForbiddenException;
 import com.kongmu373.wxshop.exception.NotFoundException;
@@ -55,7 +56,7 @@ public class GoodsService {
         goods.setId(null);
         goods.setCreatedAt(new Date());
         goods.setUpdatedAt(new Date());
-        goods.setStatus("ok");
+        goods.setStatus(DataStatus.OK.getName());
     }
 
     private void validGoodsIsNotBelongToCurrentUser(Goods goods, User currentUser) {

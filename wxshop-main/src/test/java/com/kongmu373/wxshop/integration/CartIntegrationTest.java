@@ -46,6 +46,7 @@ public class CartIntegrationTest extends AbstractIntegrationTest {
         Assertions.assertEquals(Arrays.asList(100, 200), goods.stream().map(item -> ((LinkedHashMap) item).get("price")).collect(Collectors.toList()));
         Assertions.assertEquals(Arrays.asList(200, 300), goods.stream().map(item -> ((LinkedHashMap) item).get("number")).collect(Collectors.toList()));
 
+        logout(cookieAndUser.getCookie());
     }
 
     @Test
@@ -66,6 +67,7 @@ public class CartIntegrationTest extends AbstractIntegrationTest {
         Assertions.assertEquals(Sets.newHashSet(Arrays.asList(1, 2)), ((ArrayList) result.data().get("goods")).stream().map(goods -> ((LinkedHashMap) goods).get("id")).collect(Collectors.toSet()));
         Assertions.assertEquals(Sets.newHashSet(Arrays.asList(2, 2)), ((ArrayList) result.data().get("goods")).stream().map(goods -> ((LinkedHashMap) goods).get("number")).collect(Collectors.toSet()));
         Assertions.assertTrue(((ArrayList) result.data().get("goods")).stream().allMatch(goods -> ((LinkedHashMap) goods).get("shopId").equals(1)));
+        logout(cookieAndUser.getCookie());
     }
 
     @Test
@@ -80,7 +82,7 @@ public class CartIntegrationTest extends AbstractIntegrationTest {
         Assertions.assertEquals(1, ((ArrayList) result.data().get("goods")).size());
         Assertions.assertEquals(4, ((LinkedHashMap) ((ArrayList) result.data().get("goods")).get(0)).get("id"));
         Assertions.assertEquals(200, ((LinkedHashMap) ((ArrayList) result.data().get("goods")).get(0)).get("number"));
-
+        logout(cookieAndUser.getCookie());
 
     }
 }

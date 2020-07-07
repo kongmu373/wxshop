@@ -7,14 +7,15 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 123
-
+  aop:
+    proxy-target-class: true
 # REDIS (RedisProperties)
   redis:
     database: 0      # Redis数据库索引（默认为0）
     host: localhost  # Redis服务器地址
     port: 6379       # Redis服务器连接端口
     password:        # Redis服务器连接密码（默认为空）
-    timeout: 0       # 连接超时时间（毫秒）
+    timeout: 2000       # 连接超时时间（毫秒）
     pool:
       max-active: 8  # 连接池最大连接数（使用负值表示没有限制）
       max-idle: 8    # 连接池中的最大空闲连接
@@ -23,7 +24,7 @@ spring:
 
 mybatis:
   mapper-locations: classpath*:db/mapper/*.xml
-  type-aliases-package: com.kongmu373.wxshop.generate,com.kongmu373.wxshop.entity,com.kongmu373.wxshop.result
+  type-aliases-package: com.kongmu373.wxshop.generate,com.kongmu373.wxshop.entity,com.kongmu373.wxshop.result,com.kongmu373.wxshop.mapper
   config-location: classpath:db/config.xml
 
 # logging
@@ -46,3 +47,5 @@ wxshop:
 dubbo:
   registry:
     address: zookeeper://localhost:2381
+  consumer:
+    timeout: 600000
