@@ -46,6 +46,6 @@ wxshop:
 
 dubbo:
   registry:
-    address: zookeeper://localhost:2381
+    address: zookeeper://localhost:2181
   consumer:
     timeout: 600000

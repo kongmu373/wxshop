@@ -36,9 +36,6 @@ logging:
           mapper: debug
 
 wxshop:
-  redis:
-    host: localhost
-    port: 6380
   orderservice:
     version: 0.0.1
     url: dubbo://127.0.0.1:12345

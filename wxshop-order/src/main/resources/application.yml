@@ -15,7 +15,7 @@ server:
 
 dubbo:
   registry:
-    address: zookeeper://localhost:2381
+    address: zookeeper://localhost:2181
   scan:
     base-packages: com.kongmu373.wxshop.order.service
 mybatis:

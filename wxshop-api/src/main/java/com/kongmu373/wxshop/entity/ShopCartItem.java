@@ -20,4 +20,17 @@ public class ShopCartItem extends Goods implements Serializable {
     public void setNumber(Long number) {
         this.number = number;
     }
+
+    public ShopCartItem goods2ShopCartItem(Goods goods) {
+        this.setId(goods.getId());
+        this.setShopId(goods.getShopId());
+        this.setCreatedAt(goods.getCreatedAt());
+        this.setDescription(goods.getDescription());
+        this.setDetails(goods.getDetails());
+        this.setImgUrl(goods.getImgUrl());
+        this.setName(goods.getName());
+        this.setPrice(goods.getPrice());
+        this.setUpdatedAt(goods.getUpdatedAt());
+        return this;
+    }
 }

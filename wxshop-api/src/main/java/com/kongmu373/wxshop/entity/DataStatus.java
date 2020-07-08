@@ -14,4 +14,14 @@ public enum DataStatus {
         return name().toLowerCase();
     }
 
+    public static DataStatus fromStatus(String name) {
+        try {
+            if (name == null) {
+                return DataStatus.DELETED;
+            }
+            return DataStatus.valueOf(name.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return DataStatus.DELETED;
+        }
+    }
 }
