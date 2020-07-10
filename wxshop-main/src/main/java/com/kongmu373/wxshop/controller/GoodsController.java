@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,7 +44,7 @@ public class GoodsController {
         return Result.create(null, deleteGoods);
     }
 
-    @PostMapping("/{id}")
+    @RequestMapping(value = "/{id}", method = {RequestMethod.PATCH, RequestMethod.POST})
     public Result<Goods> updateGoods(@PathVariable("id") Long id, @RequestBody Goods goods) {
         goods.setId(id);
         Goods updateGoods = goodsService.updateGoods(goods, UserContext.getCurrentUser());
