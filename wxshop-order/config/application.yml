@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: wxshop-order
+  datasource:
+    url: jdbc:mysql://10.128.4.212:3306/order?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123
+wxshop:
+  orderservice:
+    version: 0.0.1
+
+server:
+  port: 8081
+
+dubbo:
+  registry:
+    address: zookeeper://10.128.4.212:2181
+  scan:
+    base-packages: com.kongmu373.wxshop.order.service
+mybatis:
+  mapper-locations: classpath*:db/mapper/*.xml
+  type-aliases-package: com.kongmu373.wxshop.order.mapper
+  config-location: classpath:db/config.xml
