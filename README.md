@@ -31,7 +31,6 @@
 + jdk8
 + Maven
 + Docker
-+ 
 
 ## Installation
 1. 在阿里云上买一台ECS服务器
@@ -65,7 +64,9 @@
       - `docker pull redis `
       - `docker pull zookeeper `
       - `docker pull mysql && docker pull nginx`
+      
 5. 启动需要的环境
+
 ```shell
 docker run -d -v ~/wxshop-data:/var/lib/mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123 -e MYSQL_DATABASE=wxshop --name=wxshop-mysql mysql
 docker run -p 6379:6379 -d redis
@@ -81,12 +82,14 @@ docker build . -t wxshop-main
 docker build . -t wxshop-order
 # /wxshop/wxshop-order
 ```
+
 6. 配置nginx 
     - 配置负载均衡
       - /api  转发到后端服务  8080端口
       - 静态资源
         nginx.conf
-        ```
+        
+ ```
       events{                                       
       }                                             
       http {                                        
@@ -108,10 +111,12 @@ docker build . -t wxshop-order
               }                                     
           }                                         
       }                                          
-        ```
+```
+
 7. 启动程序
    1. 8080启动 8081启动
-    ```shell
+    
+```shell
 
     # wxshop-main 
       # 配置/wxshop/wxshop-main/config/application.yml 对应的ip地址
@@ -124,6 +129,7 @@ docker build . -t wxshop-order
     # nginx 启动 其中~/build 为前端`yarn build`对应的静态资源
     docker run -d -p 5000:80 -v ~/build:/static -v ~/nginx-conf/nginx.conf:/etc/nginx/nginx.conf nginx
 
-    ```
+```
+    
 8. 然后就可以打开对应ip或域名地址的:5000访问该微店商城了!  
 
